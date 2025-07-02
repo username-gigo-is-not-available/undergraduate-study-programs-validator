@@ -54,3 +54,13 @@ class ChoiceValidatorStrategy(ValidatorStrategy):
     def validate(self, df: pd.DataFrame) -> pd.DataFrame:
         invalid_mask = ~df[self.column].isin(self.values)
         return self.check(df=df, invalid_mask=invalid_mask)
+
+class RangeValidatorStrategy(ValidatorStrategy):
+    def __init__(self, column: str, min: int, max: int):
+        super().__init__(column)
+        self.min = min
+        self.max = max
+
+    def validate(self, df: pd.DataFrame) -> pd.DataFrame:
+        invalid_mask = ~df[self.column].between(self.min, self.max, inclusive='both')
+        return self.check(df=df, invalid_mask=invalid_mask)
