@@ -24,7 +24,8 @@ def teaches_validator(df_courses: pd.DataFrame, df_professors: pd.DataFrame) -> 
                 function=PipelineStep.read_data,
                 input_file_location=PipelineStep.get_input_file_location(),
                 input_file_name=Config.TEACHES_INPUT_FILE_NAME,
-                column_order=Config.TEACHES_COLUMN_ORDER,
+                columns=Config.TEACHES_COLUMNS,
+                drop_duplicates=True
             )
         )
     )
@@ -70,7 +71,8 @@ def teaches_validator(df_courses: pd.DataFrame, df_professors: pd.DataFrame) -> 
                 function=PipelineStep.save_data,
                 output_file_location=PipelineStep.get_output_file_location(),
                 output_file_name=Config.TEACHES_OUTPUT_FILE_NAME,
-                column_order=Config.TEACHES_COLUMN_ORDER
+                columns=Config.TEACHES_COLUMNS,
+                drop_duplicates=True
             )
         )
     )

@@ -22,7 +22,8 @@ def study_program_validator():
                 function=PipelineStep.read_data,
                 input_file_location=PipelineStep.get_input_file_location(),
                 input_file_name=Config.STUDY_PROGRAMS_INPUT_FILE_NAME,
-                column_order=Config.STUDY_PROGRAMS_COLUMN_ORDER,
+                columns=Config.STUDY_PROGRAMS_COLUMNS,
+                drop_duplicates=True
             )
         )
     ).add_stage(
@@ -41,7 +42,7 @@ def study_program_validator():
             PipelineStep(
                 name='validate-study-program-code',
                 function=PipelineStep.validate,
-                validator=RegexValidatorStrategy(column='study_program_code', pattern=Config.STUDY_PROGRAM_CODE_REGEX),
+                validator=RegexValidatorStrategy(column='study_program_code', pattern=Config.VALID_STUDY_PROGRAM_CODE_REGEX),
             )
         )
         .add_step(
@@ -55,7 +56,7 @@ def study_program_validator():
             PipelineStep(
                 name='validate-study-program-duration',
                 function=PipelineStep.validate,
-                validator=ChoiceValidatorStrategy(column='study_program_duration', values={2, 3, 4}),
+                validator=ChoiceValidatorStrategy(column='study_program_duration', values=Config.VALID_STUDY_PROGRAM_DURATIONS),
             )
         )
     ).add_stage(
@@ -68,7 +69,8 @@ def study_program_validator():
                 function=PipelineStep.save_data,
                 output_file_location=PipelineStep.get_output_file_location(),
                 output_file_name=Config.STUDY_PROGRAMS_OUTPUT_FILE_NAME,
-                column_order=Config.STUDY_PROGRAMS_COLUMN_ORDER,
+                columns=Config.STUDY_PROGRAMS_COLUMNS,
+                drop_duplicates=True
             )
         )
     )
