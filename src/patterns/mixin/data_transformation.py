@@ -71,10 +71,11 @@ class DataTransformationMixin:
               on: str | list[str] = None,
               left_on: str | list[str] = None,
               right_on: str | list[str] = None,
+              suffixes: tuple[str, str] = ('_x', '_y'),
               how: Literal["left", "right", "inner", "outer", "cross"] = "inner") -> pd.DataFrame:
         if left_on and right_on:
-            return pd.merge(df, merge_df, left_on=left_on, right_on=right_on, how=how)
+            return pd.merge(df, merge_df, left_on=left_on, right_on=right_on, how=how, suffixes=suffixes)
         elif on:
-            return pd.merge(df, merge_df, on=on, how=how)
+            return pd.merge(df, merge_df, on=on, how=how, suffixes=suffixes)
         else:
             raise AttributeError("You must specify either `on` or `left_on` or `right_on`")
