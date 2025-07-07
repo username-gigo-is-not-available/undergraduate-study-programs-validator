@@ -1,12 +1,10 @@
 import pandas as pd
 
-from src.config import Config
+from src.configurations import DatasetConfiguration
 from src.patterns.builder.pipeline import Pipeline
 from src.patterns.builder.stage import PipelineStage
 from src.patterns.builder.step import PipelineStep
-from src.patterns.mixin.file_storage import FileStorageMixin
-from src.patterns.strategy.filter import NotNullFilteringStrategy
-from src.patterns.strategy.validator import ChoiceValidatorStrategy
+from src.patterns.strategy.validator import ChoiceValidatorStrategy, UUIDValidatorStrategy
 from src.validator.models.enums import StageType
 
 
@@ -17,40 +15,33 @@ def postrequisite_validator(df_requisites: pd.DataFrame, df_courses: pd.DataFram
     .add_stage(
         PipelineStage(
             name='load-data',
-            stage_type=StageType.LOADING
+            stage_type=StageType.LOAD
         )
         .add_step(
             PipelineStep(
                 name='load-postrequisite-data',
                 function=PipelineStep.read_data,
-                input_file_location=PipelineStep.get_input_file_location(),
-                input_file_name=Config.POSTREQUISITES_INPUT_FILE_NAME,
-                columns=Config.POSTREQUISITES_COLUMNS,
-                drop_duplicates=True
+                configuration=DatasetConfiguration.POSTREQUISITES
             )
         )
     )
     .add_stage(
         PipelineStage(
-            name='filter-data',
-            stage_type=StageType.FILTERING,
-        ).add_step(
-            PipelineStep(
-                name='filter-out-null-postrequisites',
-                function=PipelineStep.filter,
-                filter=NotNullFilteringStrategy(column='postrequisite_id'),
-            )
-        )
-    ).add_stage(
-        PipelineStage(
             name='validate-data',
-            stage_type=StageType.VALIDATING,
+            stage_type=StageType.VALIDATE,
+        )
+        .add_step(
+            PipelineStep(
+                name='validate-postrequisite-id',
+                function=PipelineStep.validate,
+                strategy=UUIDValidatorStrategy(column='postrequisite_id')
+            )
         )
         .add_step(
             PipelineStep(
                 name='validate-course-id',
                 function=PipelineStep.validate,
-                validator=ChoiceValidatorStrategy(column='course_id',
+                strategy=ChoiceValidatorStrategy(column='course_id',
                                                   values=set(df_courses['course_id'].values.tolist())),
             )
         )
@@ -58,7 +49,7 @@ def postrequisite_validator(df_requisites: pd.DataFrame, df_courses: pd.DataFram
             PipelineStep(
                 name='validate-requisite-id',
                 function=PipelineStep.validate,
-                validator=ChoiceValidatorStrategy(column='requisite_id',
+                strategy=ChoiceValidatorStrategy(column='requisite_id',
                                                   values=set(df_requisites['requisite_id'].values.tolist())),
             )
         )
@@ -66,16 +57,13 @@ def postrequisite_validator(df_requisites: pd.DataFrame, df_courses: pd.DataFram
     .add_stage(
         PipelineStage(
             name='store-data',
-            stage_type=StageType.STORING
+            stage_type=StageType.STORE
         )
         .add_step(
             PipelineStep(
                 name='store-postrequisite-data',
                 function=PipelineStep.save_data,
-                output_file_location=FileStorageMixin.get_output_file_location(),
-                output_file_name=Config.POSTREQUISITES_OUTPUT_FILE_NAME,
-                columns=Config.POSTREQUISITES_COLUMNS,
-                drop_duplicates=True
+                configuration=DatasetConfiguration.POSTREQUISITES
             )
         )
     )

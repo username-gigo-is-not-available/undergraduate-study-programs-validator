@@ -1,4 +1,4 @@
-from src.config import Config
+from src.configurations import DatasetConfiguration
 from src.patterns.builder.pipeline import Pipeline
 from src.patterns.builder.stage import PipelineStage
 from src.patterns.builder.step import PipelineStep
@@ -13,42 +13,38 @@ def professor_validator() -> Pipeline:
     .add_stage(
         PipelineStage(
             name='load-data',
-            stage_type=StageType.LOADING
+            stage_type=StageType.LOAD
         )
         .add_step(
             PipelineStep(
                 name='load-professor-data',
                 function=PipelineStep.read_data,
-                input_file_location=PipelineStep.get_input_file_location(),
-                input_file_name=Config.PROFESSORS_INPUT_FILE_NAME,
-                columns=Config.PROFESSORS_COLUMNS,
-                drop_duplicates=True
+                configuration=DatasetConfiguration.PROFESSORS,
             )
         )
-    ).add_stage(
+    )
+    .add_stage(
         PipelineStage(
             name='validate-data',
-            stage_type=StageType.VALIDATING
+            stage_type=StageType.VALIDATE
         )
         .add_step(
             PipelineStep(
                 name='validate-professor-id',
                 function=PipelineStep.validate,
-                validator=UUIDValidatorStrategy(column='professor_id')
+                strategy=UUIDValidatorStrategy(column='professor_id')
             )
         )
-    ).add_stage(
+    )
+    .add_stage(
         PipelineStage(
             name='store-data',
-            stage_type=StageType.STORING
+            stage_type=StageType.STORE
         ).add_step(
             PipelineStep(
                 name='store-professor-data',
                 function=PipelineStep.save_data,
-                output_file_location=PipelineStep.get_output_file_location(),
-                output_file_name=Config.PROFESSORS_OUTPUT_FILE_NAME,
-                columns=Config.PROFESSORS_COLUMNS,
-                drop_duplicates=True
+                configuration=DatasetConfiguration.PROFESSORS,
             )
         )
     )
