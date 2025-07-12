@@ -54,17 +54,4 @@ def teaches_validator(df_courses: pd.DataFrame, df_professors: pd.DataFrame) -> 
             )
         )
     )
-    .add_stage(
-        PipelineStage(
-            name='store-data',
-            stage_type=StageType.STORE
-        )
-        .add_step(
-            PipelineStep(
-                name='store-teaches-data',
-                function=PipelineStep.save_data,
-                configuration=DatasetConfiguration.TEACHES,
-            )
-        )
-    )
     )

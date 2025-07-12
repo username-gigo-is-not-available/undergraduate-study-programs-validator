@@ -55,17 +55,4 @@ def requisite_validator() -> Pipeline:
             )
         )
     )
-    .add_stage(
-        PipelineStage(
-            name='store-data',
-            stage_type=StageType.STORE
-        )
-        .add_step(
-            PipelineStep(
-                name='store-requisite-data',
-                function=PipelineStep.save_data,
-                configuration=DatasetConfiguration.REQUISITES
-            )
-        )
-    )
     )

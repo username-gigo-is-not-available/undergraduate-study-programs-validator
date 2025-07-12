@@ -60,17 +60,4 @@ def study_program_validator():
             )
         )
     )
-    .add_stage(
-        PipelineStage(
-            name='store-data',
-            stage_type=StageType.STORE
-        )
-        .add_step(
-            PipelineStep(
-                name='store-study-program-data',
-                function=PipelineStep.save_data,
-                configuration=DatasetConfiguration.STUDY_PROGRAMS
-            )
-        )
-    )
     )

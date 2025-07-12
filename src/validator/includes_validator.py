@@ -54,17 +54,4 @@ def includes_validator(df_curricula: pd.DataFrame, df_courses: pd.DataFrame) -> 
             )
         )
     )
-    .add_stage(
-        PipelineStage(
-            name='store-data',
-            stage_type=StageType.STORE
-        )
-        .add_step(
-            PipelineStep(
-                name='store-includes-data',
-                function=PipelineStep.save_data,
-                configuration=DatasetConfiguration.INCLUDES
-            )
-        )
-    )
     )

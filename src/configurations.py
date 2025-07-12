@@ -32,11 +32,9 @@ class StorageConfiguration:
     MINIO_ACCESS_KEY: str = ENVIRONMENT_VARIABLES.get("MINIO_ACCESS_KEY")
     MINIO_SECRET_KEY: str = ENVIRONMENT_VARIABLES.get("MINIO_SECRET_KEY")
     MINIO_SOURCE_BUCKET_NAME: str = ENVIRONMENT_VARIABLES.get("MINIO_SOURCE_BUCKET_NAME")
-    MINIO_DESTINATION_BUCKET_NAME: str = ENVIRONMENT_VARIABLES.get("MINIO_DESTINATION_BUCKET_NAME")
     # MINIO_SECURE_CONNECTION: bool = bool(ENVIRONMENT_VARIABLES.get("MINIO_SECURE_CONNECTION"))
 
     INPUT_DIRECTORY_PATH = Path(ENVIRONMENT_VARIABLES.get("INPUT_DIRECTORY_PATH", ".."))
-    OUTPUT_DIRECTORY_PATH: Path = Path(ENVIRONMENT_VARIABLES.get("OUTPUT_DIRECTORY_PATH", ".."))
 
 
 class DatasetIOConfiguration:
@@ -46,34 +44,15 @@ class DatasetIOConfiguration:
 class DatasetPathConfiguration:
 
     STUDY_PROGRAMS_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("STUDY_PROGRAMS_DATA_INPUT_FILE_NAME"))
-    STUDY_PROGRAMS_OUTPUT: Path = Path(ENVIRONMENT_VARIABLES.get("STUDY_PROGRAMS_DATA_OUTPUT_FILE_NAME"))
-
     COURSES_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("COURSES_DATA_INPUT_FILE_NAME"))
-    COURSES_OUTPUT: Path = Path(ENVIRONMENT_VARIABLES.get("COURSES_DATA_OUTPUT_FILE_NAME"))
-
     PROFESSORS_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("PROFESSORS_DATA_INPUT_FILE_NAME"))
-    PROFESSORS_OUTPUT: Path = Path(ENVIRONMENT_VARIABLES.get("PROFESSORS_DATA_OUTPUT_FILE_NAME"))
-
     CURRICULA_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("CURRICULA_DATA_INPUT_FILE_NAME"))
-    CURRICULA_OUTPUT: Path = Path(ENVIRONMENT_VARIABLES.get("CURRICULA_DATA_OUTPUT_FILE_NAME"))
-
     REQUISITES_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("REQUISITES_DATA_INPUT_FILE_NAME"))
-    REQUISITES_OUTPUT: Path = Path(ENVIRONMENT_VARIABLES.get("REQUISITES_DATA_OUTPUT_FILE_NAME"))
-
     OFFERS_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("OFFERS_DATA_INPUT_FILE_NAME"))
-    OFFERS_OUTPUT: Path = Path(ENVIRONMENT_VARIABLES.get("OFFERS_DATA_OUTPUT_FILE_NAME"))
-
     INCLUDES_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("INCLUDES_DATA_INPUT_FILE_NAME"))
-    INCLUDES_OUTPUT: Path = Path(ENVIRONMENT_VARIABLES.get("INCLUDES_DATA_OUTPUT_FILE_NAME"))
-
     REQUIRES_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("REQUIRES_DATA_INPUT_FILE_NAME"))
-    REQUIRES_OUTPUT: Path = Path(ENVIRONMENT_VARIABLES.get("REQUIRES_DATA_OUTPUT_FILE_NAME"))
-
     SATISFIES_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("SATISFIES_DATA_INPUT_FILE_NAME"))
-    SATISFIES_OUTPUT: Path = Path(ENVIRONMENT_VARIABLES.get("SATISFIES_DATA_OUTPUT_FILE_NAME"))
-
     TEACHES_INPUT: Path =  Path(ENVIRONMENT_VARIABLES.get("TEACHES_DATA_INPUT_FILE_NAME"))
-    TEACHES_OUTPUT: Path = Path(ENVIRONMENT_VARIABLES.get("TEACHES_DATA_OUTPUT_FILE_NAME"))
 
 
 class DatasetTransformationConfiguration:
@@ -95,12 +74,10 @@ class DatasetConfiguration:
     def __init__(self,
                  dataset: DatasetType,
                  input_io_config: DatasetIOConfiguration,
-                 output_io_config: DatasetIOConfiguration,
                  transformation_config: DatasetTransformationConfiguration,
                  ):
         self.dataset_name = dataset
         self.input_io_config = input_io_config
-        self.output_io_config = output_io_config
         self.transformation_config = transformation_config
 
 
@@ -108,7 +85,6 @@ class DatasetConfiguration:
 DatasetConfiguration.STUDY_PROGRAMS = DatasetConfiguration(
     dataset=DatasetType.STUDY_PROGRAMS,
     input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.STUDY_PROGRAMS_INPUT),
-    output_io_config=DatasetIOConfiguration(DatasetPathConfiguration.STUDY_PROGRAMS_OUTPUT),
     transformation_config=DatasetTransformationConfiguration(
         columns=[
             "study_program_id",
@@ -123,7 +99,6 @@ DatasetConfiguration.STUDY_PROGRAMS = DatasetConfiguration(
 DatasetConfiguration.COURSES = DatasetConfiguration(
     dataset=DatasetType.COURSES,
     input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.COURSES_INPUT),
-    output_io_config=DatasetIOConfiguration(DatasetPathConfiguration.COURSES_OUTPUT),
     transformation_config=DatasetTransformationConfiguration(
         columns=
         [
@@ -140,7 +115,6 @@ DatasetConfiguration.COURSES = DatasetConfiguration(
 DatasetConfiguration.PROFESSORS = DatasetConfiguration(
     dataset=DatasetType.PROFESSORS,
     input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.PROFESSORS_INPUT),
-    output_io_config=DatasetIOConfiguration(DatasetPathConfiguration.PROFESSORS_OUTPUT),
     transformation_config=DatasetTransformationConfiguration(
         columns=
         [
@@ -154,7 +128,6 @@ DatasetConfiguration.PROFESSORS = DatasetConfiguration(
 DatasetConfiguration.CURRICULA = DatasetConfiguration(
     dataset=DatasetType.CURRICULA,
     input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.CURRICULA_INPUT),
-    output_io_config=DatasetIOConfiguration(DatasetPathConfiguration.CURRICULA_OUTPUT),
     transformation_config=DatasetTransformationConfiguration(
         columns=
         [
@@ -170,7 +143,6 @@ DatasetConfiguration.CURRICULA = DatasetConfiguration(
 DatasetConfiguration.REQUISITES = DatasetConfiguration(
     dataset=DatasetType.REQUISITES,
     input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.REQUISITES_INPUT),
-    output_io_config=DatasetIOConfiguration(DatasetPathConfiguration.REQUISITES_OUTPUT),
     transformation_config=DatasetTransformationConfiguration(
         columns=
         [
@@ -183,7 +155,6 @@ DatasetConfiguration.REQUISITES = DatasetConfiguration(
 DatasetConfiguration.OFFERS = DatasetConfiguration(
     dataset=DatasetType.OFFERS,
     input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.OFFERS_INPUT),
-    output_io_config=DatasetIOConfiguration(DatasetPathConfiguration.OFFERS_OUTPUT),
     transformation_config=DatasetTransformationConfiguration(
         columns=
         [
@@ -196,7 +167,6 @@ DatasetConfiguration.OFFERS = DatasetConfiguration(
 DatasetConfiguration.INCLUDES = DatasetConfiguration(
     dataset=DatasetType.INCLUDES,
     input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.INCLUDES_INPUT),
-    output_io_config=DatasetIOConfiguration(DatasetPathConfiguration.INCLUDES_OUTPUT),
     transformation_config=DatasetTransformationConfiguration(
         columns=
         [
@@ -209,7 +179,6 @@ DatasetConfiguration.INCLUDES = DatasetConfiguration(
 DatasetConfiguration.REQUIRES = DatasetConfiguration(
     dataset=DatasetType.POSTREQUISITES,
     input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.REQUIRES_INPUT),
-    output_io_config=DatasetIOConfiguration(DatasetPathConfiguration.REQUIRES_OUTPUT),
     transformation_config=DatasetTransformationConfiguration(
         columns=
         [
@@ -222,7 +191,6 @@ DatasetConfiguration.REQUIRES = DatasetConfiguration(
 DatasetConfiguration.SATISFIES = DatasetConfiguration(
     dataset=DatasetType.PREREQUISITES,
     input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.SATISFIES_INPUT),
-    output_io_config=DatasetIOConfiguration(DatasetPathConfiguration.SATISFIES_OUTPUT),
     transformation_config=DatasetTransformationConfiguration(
         columns=
         [
@@ -235,7 +203,6 @@ DatasetConfiguration.SATISFIES = DatasetConfiguration(
 DatasetConfiguration.TEACHES = DatasetConfiguration(
     dataset=DatasetType.TEACHES,
     input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.TEACHES_INPUT),
-    output_io_config=DatasetIOConfiguration(DatasetPathConfiguration.TEACHES_OUTPUT),
     transformation_config=DatasetTransformationConfiguration(
         columns=
         [

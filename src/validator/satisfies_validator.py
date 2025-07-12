@@ -54,17 +54,4 @@ def satisfies_validator(df_requisites: pd.DataFrame, df_courses: pd.DataFrame) -
             )
         )
     )
-    .add_stage(
-        PipelineStage(
-            name='store-data',
-            stage_type=StageType.STORE
-        )
-        .add_step(
-            PipelineStep(
-                name='store-satisfies-data',
-                function=PipelineStep.save_data,
-                configuration=DatasetConfiguration.SATISFIES
-            )
-        )
-    )
     )
