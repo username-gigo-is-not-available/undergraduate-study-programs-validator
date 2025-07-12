@@ -140,41 +140,41 @@ which can be found at the following [URL](https://finki.ukim.mk/mk/dodiplomski-s
 - Store the validated data in CSV files with the following columns:
   `includes_id`, `curriculum_id`, `course_id`
 
-#### Prerequisites:
+#### Requires:
 
 ##### Loading Stage
 
 - Load the prerequisite data (output from the etl) with the following columns:
-  `prerequisite_id`, `requisite_id`, `prerequisite_course_id`
+  `requires_id`, `requisite_id`, `course_id`
 
 ##### Validating Stage
 
-- Ensure `prerequisite_id` is a valid UUID
+- Ensure `requires_id` is a valid UUID
 - Verify that `course_id` exists in the course dataset.
 - Verify that `requisite_id` exists in the requisite dataset.
 
 ##### Storing Stage
 
 - Store the validated data in CSV files with the following columns:
-  `prerequisite_id`, `requisite_id`, `prerequisite_course_id`
+  `requires_id`, `requisite_id`, `course_id`
 
-#### Postrequisites:
+#### Satisfies:
 
 ##### Loading Stage
 
 - Load the prerequisite data (output from the etl) with the following columns:
-  `postrequisite_id`, `requisite_id`, `course_id`
+  `satisfies_id`, `requisite_id`, `prerequisite_course_id`
 
 ##### Validating Stage
 
-- Ensure `postrequisite_id` is a valid UUID
+- Ensure `satisfies_id` is a valid UUID
 - Verify that `course_id` exists in the course dataset.
 - Verify that `requisite_id` exists in the requisite dataset.
 
 ##### Storing Stage
 
 - Store the validated data in CSV files with the following columns:
-  `postrequisite_id`, `requisite_id`, `course_id`
+  `satisfies_id`, `requisite_id`, `prerequisite_course_id`
 
 #### Teaches:
 
@@ -204,8 +204,8 @@ This application will produce the following datasets:
 5. Requisites: `requisite_id`, `course_prerequisite_type`, `minimum_required_number_of_courses`
 6. Offers: `offers_id`, `curriculum_id`, `study_program_id`
 7. Includes: `includes_id`, `curriculum_id`, `course_id`
-8. Prerequisites: `prerequisite_id`, `requisite_id`, `course_prerequisite_id`
-9. Postrequisites: `postrequisite_id`, `requisite_id`, `course_id`
+8. Requires: `requires_id`, `requisite_id`, `course_id`
+9. Satisfies: `satisfies_id`, `requisite_id`, `prerequisite_course_id`
 10. Teaches: `teaches_id`, `course_id`, `professor_id`
 
 ## Requirements
@@ -225,8 +225,8 @@ Before running the scraper, make sure to set the following environment variables
 - `REQUISITES_DATA_INPUT_FILE_NAME`: the name of the requisites input file
 - `OFFERS_DATA_INPUT_FILE_NAME`: the name of the offers input file
 - `INCLUDES_DATA_INPUT_FILE_NAME`: the name of the includes input file
-- `PREREQUISITES_DATA_INPUT_FILE_NAME`: the name of the prerequisites input file
-- `POSTREQUISITES_DATA_INPUT_FILE_NAME`: the name of the postrequisites input file
+- `REQUIRES_DATA_INPUTT_FILE_NAME`: the name of the requires input file
+- `SATISFIES_DATA_INPUT_FILE_NAME`: the name of the satisfies input file
 - `TEACHES_DATA_INPUT_FILE_NAME`: the name of the teaches input file
 
 - `STUDY_PROGRAMS_DATA_OUTPUT_FILE_NAME`: the name of the study_programs output file
@@ -236,8 +236,8 @@ Before running the scraper, make sure to set the following environment variables
 - `REQUISITES_DATA_OUTPUT_FILE_NAME`: the name of the requisites output file
 - `OFFERS_DATA_OUTPUT_FILE_NAME`: the name of the offers output file
 - `INCLUDES_DATA_OUTPUT_FILE_NAME`: the name of the includes output file
-- `PREREQUISITES_DATA_OUTPUT_FILE_NAME`: the name of the prerequisites output file
-- `POSTREQUISITES_DATA_OUTPUT_FILE_NAME`: the name of the postrequisites output file
+- `REQUIRES_DATA_OUTPUT_FILE_NAME`: the name of the requires output file
+- `SATISFIES_DATA_OUTPUT_FILE_NAME`: the name of the satisfies output file
 - `TEACHES_DATA_OUTPUT_FILE_NAME`: the name of the teaches output file
 
 

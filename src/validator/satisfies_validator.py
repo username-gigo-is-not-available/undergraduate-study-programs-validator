@@ -8,9 +8,9 @@ from src.patterns.strategy.validator import ChoiceValidatorStrategy, UUIDValidat
 from src.validator.models.enums import StageType
 
 
-def prerequisite_validator(df_requisites: pd.DataFrame, df_courses: pd.DataFrame) -> Pipeline:
+def satisfies_validator(df_requisites: pd.DataFrame, df_courses: pd.DataFrame) -> Pipeline:
     return (Pipeline(
-        name='prerequisite-validator-pipeline'
+        name='satisfies-validator-pipeline'
     )
     .add_stage(
         PipelineStage(
@@ -19,9 +19,9 @@ def prerequisite_validator(df_requisites: pd.DataFrame, df_courses: pd.DataFrame
         )
         .add_step(
             PipelineStep(
-                name='load-prerequisite-data',
+                name='load-satisfies-data',
                 function=PipelineStep.read_data,
-                configuration=DatasetConfiguration.PREREQUISITES
+                configuration=DatasetConfiguration.SATISFIES
             )
         )
     )
@@ -32,9 +32,9 @@ def prerequisite_validator(df_requisites: pd.DataFrame, df_courses: pd.DataFrame
         )
         .add_step(
             PipelineStep(
-                name='validate-prerequisite-id',
+                name='validate-satisfies-id',
                 function=PipelineStep.validate,
-                strategy=UUIDValidatorStrategy(column='prerequisite_id')
+                strategy=UUIDValidatorStrategy(column='satisfies_id')
             )
         )
         .add_step(
@@ -61,9 +61,9 @@ def prerequisite_validator(df_requisites: pd.DataFrame, df_courses: pd.DataFrame
         )
         .add_step(
             PipelineStep(
-                name='store-prerequisite-data',
+                name='store-satisfies-data',
                 function=PipelineStep.save_data,
-                configuration=DatasetConfiguration.PREREQUISITES
+                configuration=DatasetConfiguration.SATISFIES
             )
         )
     )

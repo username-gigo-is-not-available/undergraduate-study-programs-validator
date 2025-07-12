@@ -66,11 +66,11 @@ class DatasetPathConfiguration:
     INCLUDES_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("INCLUDES_DATA_INPUT_FILE_NAME"))
     INCLUDES_OUTPUT: Path = Path(ENVIRONMENT_VARIABLES.get("INCLUDES_DATA_OUTPUT_FILE_NAME"))
 
-    PREREQUISITES_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("PREREQUISITES_DATA_INPUT_FILE_NAME"))
-    PREREQUISITES_OUTPUT: Path = Path(ENVIRONMENT_VARIABLES.get("PREREQUISITES_DATA_OUTPUT_FILE_NAME"))
+    REQUIRES_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("REQUIRES_DATA_INPUT_FILE_NAME"))
+    REQUIRES_OUTPUT: Path = Path(ENVIRONMENT_VARIABLES.get("REQUIRES_DATA_OUTPUT_FILE_NAME"))
 
-    POSTREQUISITES_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("POSTREQUISITES_DATA_INPUT_FILE_NAME"))
-    POSTREQUISITES_OUTPUT: Path = Path(ENVIRONMENT_VARIABLES.get("POSTREQUISITES_DATA_OUTPUT_FILE_NAME"))
+    SATISFIES_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("SATISFIES_DATA_INPUT_FILE_NAME"))
+    SATISFIES_OUTPUT: Path = Path(ENVIRONMENT_VARIABLES.get("SATISFIES_DATA_OUTPUT_FILE_NAME"))
 
     TEACHES_INPUT: Path =  Path(ENVIRONMENT_VARIABLES.get("TEACHES_DATA_INPUT_FILE_NAME"))
     TEACHES_OUTPUT: Path = Path(ENVIRONMENT_VARIABLES.get("TEACHES_DATA_OUTPUT_FILE_NAME"))
@@ -88,8 +88,8 @@ class DatasetConfiguration:
     REQUISITES: "DatasetConfiguration"
     OFFERS: "DatasetConfiguration"
     INCLUDES: "DatasetConfiguration"
-    PREREQUISITES: "DatasetConfiguration"
-    POSTREQUISITES: "DatasetConfiguration"
+    REQUIRES: "DatasetConfiguration"
+    SATISFIES: "DatasetConfiguration"
     TEACHES: "DatasetConfiguration"
 
     def __init__(self,
@@ -206,28 +206,28 @@ DatasetConfiguration.INCLUDES = DatasetConfiguration(
         ]
     )
 )
-DatasetConfiguration.PREREQUISITES = DatasetConfiguration(
-    dataset=DatasetType.PREREQUISITES,
-    input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.PREREQUISITES_INPUT),
-    output_io_config=DatasetIOConfiguration(DatasetPathConfiguration.PREREQUISITES_OUTPUT),
+DatasetConfiguration.REQUIRES = DatasetConfiguration(
+    dataset=DatasetType.POSTREQUISITES,
+    input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.REQUIRES_INPUT),
+    output_io_config=DatasetIOConfiguration(DatasetPathConfiguration.REQUIRES_OUTPUT),
     transformation_config=DatasetTransformationConfiguration(
         columns=
         [
-            "prerequisite_id",
-            "prerequisite_course_id",
+            "requires_id",
+            "course_id",
             "requisite_id"
         ],
     )
 )
-DatasetConfiguration.POSTREQUISITES = DatasetConfiguration(
-    dataset=DatasetType.POSTREQUISITES,
-    input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.POSTREQUISITES_INPUT),
-    output_io_config=DatasetIOConfiguration(DatasetPathConfiguration.POSTREQUISITES_OUTPUT),
+DatasetConfiguration.SATISFIES = DatasetConfiguration(
+    dataset=DatasetType.PREREQUISITES,
+    input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.SATISFIES_INPUT),
+    output_io_config=DatasetIOConfiguration(DatasetPathConfiguration.SATISFIES_OUTPUT),
     transformation_config=DatasetTransformationConfiguration(
         columns=
         [
-            "postrequisite_id",
-            "course_id",
+            "satisfies_id",
+            "prerequisite_course_id",
             "requisite_id"
         ],
     )

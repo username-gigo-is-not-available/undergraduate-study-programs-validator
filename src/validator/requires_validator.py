@@ -8,9 +8,9 @@ from src.patterns.strategy.validator import ChoiceValidatorStrategy, UUIDValidat
 from src.validator.models.enums import StageType
 
 
-def postrequisite_validator(df_requisites: pd.DataFrame, df_courses: pd.DataFrame) -> Pipeline:
+def requires_validator(df_requisites: pd.DataFrame, df_courses: pd.DataFrame) -> Pipeline:
     return (Pipeline(
-        name='postrequisite-validator-pipeline'
+        name='requires-validator-pipeline'
     )
     .add_stage(
         PipelineStage(
@@ -19,9 +19,9 @@ def postrequisite_validator(df_requisites: pd.DataFrame, df_courses: pd.DataFram
         )
         .add_step(
             PipelineStep(
-                name='load-postrequisite-data',
+                name='load-requires-data',
                 function=PipelineStep.read_data,
-                configuration=DatasetConfiguration.POSTREQUISITES
+                configuration=DatasetConfiguration.REQUIRES
             )
         )
     )
@@ -32,9 +32,9 @@ def postrequisite_validator(df_requisites: pd.DataFrame, df_courses: pd.DataFram
         )
         .add_step(
             PipelineStep(
-                name='validate-postrequisite-id',
+                name='validate-requires-id',
                 function=PipelineStep.validate,
-                strategy=UUIDValidatorStrategy(column='postrequisite_id')
+                strategy=UUIDValidatorStrategy(column='requires_id')
             )
         )
         .add_step(
@@ -63,7 +63,7 @@ def postrequisite_validator(df_requisites: pd.DataFrame, df_courses: pd.DataFram
             PipelineStep(
                 name='store-postrequisite-data',
                 function=PipelineStep.save_data,
-                configuration=DatasetConfiguration.POSTREQUISITES
+                configuration=DatasetConfiguration.REQUIRES
             )
         )
     )
