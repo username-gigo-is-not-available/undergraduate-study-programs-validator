@@ -8,6 +8,7 @@ from src.validator.models.enums import CoursePrerequisiteType, CourseType, Cours
 
 ENVIRONMENT_VARIABLES: dict[str, str] = {**dotenv_values("../.env"), **os.environ}
 
+
 class ApplicationConfiguration:
     ECTS_VALUE: int = 6
     PROFESSOR_TITLES: list[str] = ["ворн.", "проф.", "д-р", "доц."]
@@ -25,39 +26,49 @@ class ApplicationConfiguration:
     VALID_COURSE_ACADEMIC_YEARS_RANGE: range = range(1, 4)
     VALID_COURSE_SEMESTERS_RANGE: range = range(1, 8)
 
-class StorageConfiguration:
 
+class StorageConfiguration:
     FILE_STORAGE_TYPE: str = ENVIRONMENT_VARIABLES.get("FILE_STORAGE_TYPE")
     MINIO_ENDPOINT_URL: str = ENVIRONMENT_VARIABLES.get("MINIO_ENDPOINT_URL")
     MINIO_ACCESS_KEY: str = ENVIRONMENT_VARIABLES.get("MINIO_ACCESS_KEY")
     MINIO_SECRET_KEY: str = ENVIRONMENT_VARIABLES.get("MINIO_SECRET_KEY")
-    MINIO_SOURCE_BUCKET_NAME: str = ENVIRONMENT_VARIABLES.get("MINIO_SOURCE_BUCKET_NAME")
+    MINIO_INPUT_DATA_BUCKET_NAME: str = ENVIRONMENT_VARIABLES.get("MINIO_INPUT_DATA_BUCKET_NAME")
+    MINIO_SCHEMA_BUCKET_NAME: str = ENVIRONMENT_VARIABLES.get("MINIO_SCHEMA_BUCKET_NAME")
     # MINIO_SECURE_CONNECTION: bool = bool(ENVIRONMENT_VARIABLES.get("MINIO_SECURE_CONNECTION"))
 
-    INPUT_DIRECTORY_PATH = Path(ENVIRONMENT_VARIABLES.get("INPUT_DIRECTORY_PATH", ".."))
+    INPUT_DATA_DIRECTORY_PATH = Path(ENVIRONMENT_VARIABLES.get("INPUT_DATA_DIRECTORY_PATH", ".."))
+    SCHEMA_DIRECTORY_PATH: Path = Path(ENVIRONMENT_VARIABLES.get('SCHEMA_DIRECTORY_PATH', '..'))
 
 
 class DatasetIOConfiguration:
-    def __init__(self, file_name: str | Path):
+    def __init__(self, file_name: str | Path
+                 ):
         self.file_name = file_name
 
-class DatasetPathConfiguration:
 
-    STUDY_PROGRAMS_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("STUDY_PROGRAMS_DATA_INPUT_FILE_NAME"))
-    COURSES_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("COURSES_DATA_INPUT_FILE_NAME"))
-    PROFESSORS_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("PROFESSORS_DATA_INPUT_FILE_NAME"))
-    CURRICULA_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("CURRICULA_DATA_INPUT_FILE_NAME"))
-    REQUISITES_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("REQUISITES_DATA_INPUT_FILE_NAME"))
-    OFFERS_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("OFFERS_DATA_INPUT_FILE_NAME"))
-    INCLUDES_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("INCLUDES_DATA_INPUT_FILE_NAME"))
-    REQUIRES_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("REQUIRES_DATA_INPUT_FILE_NAME"))
-    SATISFIES_INPUT: Path = Path(ENVIRONMENT_VARIABLES.get("SATISFIES_DATA_INPUT_FILE_NAME"))
-    TEACHES_INPUT: Path =  Path(ENVIRONMENT_VARIABLES.get("TEACHES_DATA_INPUT_FILE_NAME"))
+class PathConfiguration:
+    STUDY_PROGRAMS_INPUT_DATA: Path = Path(ENVIRONMENT_VARIABLES.get("STUDY_PROGRAMS_DATA_INPUT_FILE_NAME"))
+    COURSES_INPUT_DATA: Path = Path(ENVIRONMENT_VARIABLES.get("COURSES_DATA_INPUT_FILE_NAME"))
+    PROFESSORS_INPUT_DATA: Path = Path(ENVIRONMENT_VARIABLES.get("PROFESSORS_DATA_INPUT_FILE_NAME"))
+    CURRICULA_INPUT_DATA: Path = Path(ENVIRONMENT_VARIABLES.get("CURRICULA_DATA_INPUT_FILE_NAME"))
+    REQUISITES_INPUT_DATA: Path = Path(ENVIRONMENT_VARIABLES.get("REQUISITES_DATA_INPUT_FILE_NAME"))
+    OFFERS_INPUT_DATA: Path = Path(ENVIRONMENT_VARIABLES.get("OFFERS_DATA_INPUT_FILE_NAME"))
+    INCLUDES_INPUT_DATA: Path = Path(ENVIRONMENT_VARIABLES.get("INCLUDES_DATA_INPUT_FILE_NAME"))
+    REQUIRES_INPUT_DATA: Path = Path(ENVIRONMENT_VARIABLES.get("REQUIRES_DATA_INPUT_FILE_NAME"))
+    SATISFIES_INPUT_DATA: Path = Path(ENVIRONMENT_VARIABLES.get("SATISFIES_DATA_INPUT_FILE_NAME"))
+    TEACHES_INPUT_DATA: Path = Path(ENVIRONMENT_VARIABLES.get("TEACHES_DATA_INPUT_FILE_NAME"))
 
+    STUDY_PROGRAMS_SCHEMA: Path = Path(ENVIRONMENT_VARIABLES.get("STUDY_PROGRAMS_SCHEMA_FILE_NAME"))
+    CURRICULA_SCHEMA: Path = Path(ENVIRONMENT_VARIABLES.get("CURRICULA_SCHEMA_FILE_NAME"))
+    COURSES_SCHEMA: Path = Path(ENVIRONMENT_VARIABLES.get("COURSES_SCHEMA_FILE_NAME"))
+    REQUISITES_SCHEMA: Path = Path(ENVIRONMENT_VARIABLES.get("REQUISITES_SCHEMA_FILE_NAME"))
+    PROFESSORS_SCHEMA: Path = Path(ENVIRONMENT_VARIABLES.get("PROFESSORS_SCHEMA_FILE_NAME"))
+    OFFERS_SCHEMA: Path = Path(ENVIRONMENT_VARIABLES.get("OFFERS_SCHEMA_FILE_NAME"))
+    INCLUDES_SCHEMA: Path = Path(ENVIRONMENT_VARIABLES.get("INCLUDES_SCHEMA_FILE_NAME"))
+    REQUIRES_SCHEMA: Path = Path(ENVIRONMENT_VARIABLES.get("REQUIRES_SCHEMA_FILE_NAME"))
+    SATISFIES_SCHEMA: Path = Path(ENVIRONMENT_VARIABLES.get("SATISFIES_SCHEMA_FILE_NAME"))
+    TEACHES_SCHEMA: Path = Path(ENVIRONMENT_VARIABLES.get("TEACHES_SCHEMA_FILE_NAME"))
 
-class DatasetTransformationConfiguration:
-    def __init__(self, columns: list[str]):
-        self.columns = columns
 
 class DatasetConfiguration:
     STUDY_PROGRAMS: "DatasetConfiguration"
@@ -73,142 +84,73 @@ class DatasetConfiguration:
 
     def __init__(self,
                  dataset: DatasetType,
-                 input_io_config: DatasetIOConfiguration,
-                 transformation_config: DatasetTransformationConfiguration,
+                 input_io_configuration: DatasetIOConfiguration,
+                 schema_configuration: DatasetIOConfiguration,
                  ):
         self.dataset_name = dataset
-        self.input_io_config = input_io_config
-        self.transformation_config = transformation_config
-
+        self.input_io_configuration = input_io_configuration
+        self.schema_configuration = schema_configuration
 
 
 DatasetConfiguration.STUDY_PROGRAMS = DatasetConfiguration(
     dataset=DatasetType.STUDY_PROGRAMS,
-    input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.STUDY_PROGRAMS_INPUT),
-    transformation_config=DatasetTransformationConfiguration(
-        columns=[
-            "study_program_id",
-            "study_program_code",
-            "study_program_name",
-            "study_program_duration",
-            "study_program_url"
-        ]
-    )
-)
-
-DatasetConfiguration.COURSES = DatasetConfiguration(
-    dataset=DatasetType.COURSES,
-    input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.COURSES_INPUT),
-    transformation_config=DatasetTransformationConfiguration(
-        columns=
-        [
-            "course_id",
-            "course_code",
-            "course_name_mk",
-            "course_name_en",
-            "course_url",
-            "course_level"
-        ]
-    )
-)
-
-DatasetConfiguration.PROFESSORS = DatasetConfiguration(
-    dataset=DatasetType.PROFESSORS,
-    input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.PROFESSORS_INPUT),
-    transformation_config=DatasetTransformationConfiguration(
-        columns=
-        [
-            "professor_id",
-            "professor_name",
-            "professor_surname"
-        ],
-    )
+    input_io_configuration=DatasetIOConfiguration(PathConfiguration.STUDY_PROGRAMS_INPUT_DATA),
+    schema_configuration=DatasetIOConfiguration(PathConfiguration.STUDY_PROGRAMS_SCHEMA),
 )
 
 DatasetConfiguration.CURRICULA = DatasetConfiguration(
     dataset=DatasetType.CURRICULA,
-    input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.CURRICULA_INPUT),
-    transformation_config=DatasetTransformationConfiguration(
-        columns=
-        [
-            "curriculum_id",
-            "course_type",
-            "course_semester_season",
-            "course_academic_year",
-            "course_semester"
-        ]
-    )
+    input_io_configuration=DatasetIOConfiguration(PathConfiguration.CURRICULA_INPUT_DATA),
+    schema_configuration=DatasetIOConfiguration(PathConfiguration.CURRICULA_SCHEMA),
+)
+
+DatasetConfiguration.COURSES = DatasetConfiguration(
+    dataset=DatasetType.COURSES,
+    input_io_configuration=DatasetIOConfiguration(PathConfiguration.COURSES_INPUT_DATA),
+    schema_configuration=DatasetIOConfiguration(PathConfiguration.COURSES_SCHEMA),
 )
 
 DatasetConfiguration.REQUISITES = DatasetConfiguration(
     dataset=DatasetType.REQUISITES,
-    input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.REQUISITES_INPUT),
-    transformation_config=DatasetTransformationConfiguration(
-        columns=
-        [
-            "requisite_id",
-            "course_prerequisite_type",
-            "minimum_required_number_of_courses"
-        ],
-    )
+    input_io_configuration=DatasetIOConfiguration(PathConfiguration.REQUISITES_INPUT_DATA),
+    schema_configuration=DatasetIOConfiguration(PathConfiguration.REQUISITES_SCHEMA),
 )
+
+DatasetConfiguration.PROFESSORS = DatasetConfiguration(
+    dataset=DatasetType.PROFESSORS,
+    input_io_configuration=DatasetIOConfiguration(PathConfiguration.PROFESSORS_INPUT_DATA),
+    schema_configuration=DatasetIOConfiguration(PathConfiguration.PROFESSORS_SCHEMA),
+)
+
 DatasetConfiguration.OFFERS = DatasetConfiguration(
     dataset=DatasetType.OFFERS,
-    input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.OFFERS_INPUT),
-    transformation_config=DatasetTransformationConfiguration(
-        columns=
-        [
-            "offers_id",
-            "curriculum_id",
-            "study_program_id"
-        ]
-    )
+    input_io_configuration=DatasetIOConfiguration(PathConfiguration.OFFERS_INPUT_DATA),
+    schema_configuration=DatasetIOConfiguration(PathConfiguration.OFFERS_SCHEMA),
 )
+
 DatasetConfiguration.INCLUDES = DatasetConfiguration(
     dataset=DatasetType.INCLUDES,
-    input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.INCLUDES_INPUT),
-    transformation_config=DatasetTransformationConfiguration(
-        columns=
-        [
-            "includes_id",
-            "curriculum_id",
-            "course_id"
-        ]
-    )
+    input_io_configuration=DatasetIOConfiguration(PathConfiguration.INCLUDES_INPUT_DATA),
+    schema_configuration=DatasetIOConfiguration(PathConfiguration.INCLUDES_SCHEMA),
+
 )
+
 DatasetConfiguration.REQUIRES = DatasetConfiguration(
     dataset=DatasetType.POSTREQUISITES,
-    input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.REQUIRES_INPUT),
-    transformation_config=DatasetTransformationConfiguration(
-        columns=
-        [
-            "requires_id",
-            "course_id",
-            "requisite_id"
-        ],
-    )
+    input_io_configuration=DatasetIOConfiguration(PathConfiguration.REQUIRES_INPUT_DATA),
+    schema_configuration=DatasetIOConfiguration(PathConfiguration.REQUIRES_SCHEMA),
+
 )
+
 DatasetConfiguration.SATISFIES = DatasetConfiguration(
     dataset=DatasetType.PREREQUISITES,
-    input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.SATISFIES_INPUT),
-    transformation_config=DatasetTransformationConfiguration(
-        columns=
-        [
-            "satisfies_id",
-            "prerequisite_course_id",
-            "requisite_id"
-        ],
-    )
+    input_io_configuration=DatasetIOConfiguration(PathConfiguration.SATISFIES_INPUT_DATA),
+    schema_configuration=DatasetIOConfiguration(PathConfiguration.SATISFIES_SCHEMA),
+
 )
+
 DatasetConfiguration.TEACHES = DatasetConfiguration(
     dataset=DatasetType.TEACHES,
-    input_io_config=DatasetIOConfiguration(DatasetPathConfiguration.TEACHES_INPUT),
-    transformation_config=DatasetTransformationConfiguration(
-        columns=
-        [
-            "teaches_id",
-            "course_id",
-            "professor_id"
-        ],
-    )
+    input_io_configuration=DatasetIOConfiguration(PathConfiguration.TEACHES_INPUT_DATA),
+    schema_configuration=DatasetIOConfiguration(PathConfiguration.TEACHES_SCHEMA),
 )

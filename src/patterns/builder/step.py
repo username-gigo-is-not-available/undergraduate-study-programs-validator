@@ -2,7 +2,7 @@ import logging
 
 import pandas as pd
 
-from src.patterns.mixin.file_storage import FileStorageMixin
+from src.patterns.mixin.storage import FileStorageMixin
 from src.patterns.mixin.data_validation import DataValidationMixin
 
 

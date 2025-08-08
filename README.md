@@ -170,16 +170,28 @@ Before running the scraper, make sure to set the following environment variables
 - `SATISFIES_DATA_INPUT_FILE_NAME`: the name of the satisfies input file
 - `TEACHES_DATA_INPUT_FILE_NAME`: the name of the teaches input file
 
+- `STUDY_PROGRAMS_SCHEMA_FILE_NAME`: the name of the file where the avro schema for the `StudyProgram` record is stored
+- `CURRICULA_SCHEMA_FILE_NAME`: the name of the file where the avro schema for the `Curriculum` record is stored
+- `COURSES_SCHEMA_FILE_NAME`: the name of the file where the avro schema for the `Course` record is stored
+- `REQUISITES_SCHEMA_FILE_NAME`: the name of the file where the avro schema for the `Requisite` record is stored
+- `PROFESSORS_SCHEMA_FILE_NAME`: the name of the file where the avro schema for the `Professor` record is stored
+- `OFFERS_SCHEMA_FILE_NAME`: the name of the file where the avro schema for the `Offers` record is stored
+- `INCLUDES_SCHEMA_FILE_NAME`: the name of the file where the avro schema for the `Includes` record is stored
+- `REQUIRES_SCHEMA_FILE_NAME`: the name of the file where the avro schema for the `Requires` record is stored
+- `SATISFIES_SCHEMA_FILE_NAME`: the name of the file where the avro schema for the `Satisfies` record is stored
+- `TEACHES_SCHEMA_FILE_NAME`: the name of the file where the avro schema for the `Teaches` record is stored
+
 ##### If running the application with local storage:
 
-- `INPUT_DIRECTORY_PATH`: the path to the directory where the input files are stored
+- `INPUT_DATA_DIRECTORY_PATH`: the path to the directory where the input files are stored
 
 ##### If running the application with MinIO:
 
 - `MINIO_ENDPOINT_URL`: the endpoint of the MinIO server
 - `MINIO_ACCESS_KEY`: the access key of the MinIO server
 - `MINIO_SECRET_KEY`: the secret key of the MinIO server
-- `MINIO_SOURCE_BUCKET_NAME`: the name of the bucket where the input files are stored
+- `MINIO_INPUT_DATA_BUCKET_NAME`: the name of the bucket where the input files are stored
+- `MINIO_SCHEMA_BUCKET_NAME`: the name of the bucket where the schema files are stored
 
 ## Installation
 
